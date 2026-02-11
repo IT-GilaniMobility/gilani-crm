@@ -64,6 +64,7 @@ export function useProfile() {
       import { useQuery } from "@tanstack/react-query";
       import { supabase } from "@/lib/supabaseClient";
 
+      // Type declarations at module scope
       type Profile = {
         id: string;
         role: string | null;
