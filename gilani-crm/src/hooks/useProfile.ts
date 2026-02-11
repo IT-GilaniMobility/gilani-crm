@@ -35,10 +35,20 @@ export function useProfile() {
         throw error;
       }
 
-      return {
-        ...(data ?? { id: sessionData.session.user.id, role: null, manager_id: null, created_at: null }),
-        email: sessionData.session.user.email,
-      };
+      if (data) {
+        return {
+          ...data,
+          email: sessionData.session.user.email,
+        };
+      } else {
+        return {
+          id: sessionData.session.user.id,
+          role: null,
+          manager_id: null,
+          created_at: null,
+          email: sessionData.session.user.email,
+        };
+      }
     },
     staleTime: 30_000,
   });
