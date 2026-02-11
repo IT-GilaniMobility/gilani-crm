@@ -4,7 +4,8 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useProfile, type Profile } from "@/hooks/useProfile";
+import { useProfile } from "@/hooks/useProfile";
+import type { Profile } from "@/hooks/useProfile";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function TeamPage() {
@@ -14,7 +15,7 @@ export default function TeamPage() {
     queryKey: ["team"],
     queryFn: async (): Promise<Profile[]> => {
       let query = supabase.from("profiles").select("*");
-      if (profile?.role === "manager") {
+      if (isProfileWithRole(profile) && profile.role === "manager") {
         query = query.eq("manager_id", profile.id);
       }
       const { data, error } = await query;
@@ -44,7 +45,11 @@ export default function TeamPage() {
     });
   }, [leads, team]);
 
-  if (!profile || (profile.role !== "manager" && profile.role !== "admin")) {
+  function isProfileWithRole(p: unknown): p is Profile {
+    return !!p && typeof p === "object" && "role" in p && "id" in p;
+  }
+
+  if (!isProfileWithRole(profile) || (profile.role !== "manager" && profile.role !== "admin")) {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-8 text-sm text-slate-500">
         You do not have access to view team analytics.

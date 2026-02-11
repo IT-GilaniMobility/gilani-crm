@@ -6,18 +6,25 @@ import { usePathname } from "next/navigation";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { useProfile } from "@/hooks/useProfile";
+import type { ProfileWithEmail } from "@/hooks/useProfile";
 
 type AppShellProps = {
   children: React.ReactNode;
 };
 
 export default function AppShell({ children }: AppShellProps) {
+
   const { data: profile } = useProfile();
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
 
-  const role = profile?.role ?? "sales";
-  const email = profile?.email ?? "";
+  // Type guard for ProfileWithEmail
+  function isProfileWithEmail(p: unknown): p is ProfileWithEmail {
+    return !!p && typeof p === "object" && "role" in p && "email" in p;
+  }
+
+  const role = isProfileWithEmail(profile) && profile.role ? profile.role : "sales";
+  const email = isProfileWithEmail(profile) ? profile.email : "";
 
   const contextLabel = useMemo(() => {
     if (pathname.startsWith("/team")) {

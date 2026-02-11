@@ -23,6 +23,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useLeads } from "@/hooks/useLeads";
 import { useProfile } from "@/hooks/useProfile";
+import type { ProfileWithEmail } from "@/hooks/useProfile";
 import { supabase } from "@/lib/supabaseClient";
 import type { Database } from "@/types/database";
 
@@ -47,6 +48,7 @@ type LeadFormValues = z.infer<typeof leadSchema>;
 
 type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
 
+
 export function AddLeadModal() {
   const { data: profile } = useProfile();
   const { addLead } = useLeads();
@@ -69,11 +71,16 @@ export function AddLeadModal() {
     assigned_to: "",
   });
 
-  const isManager = profile?.role === "manager" || profile?.role === "admin";
+  // Type guard: profile is ProfileWithEmail if it has a role and id property
+  function isProfileWithEmail(p: unknown): p is ProfileWithEmail {
+    return !!p && typeof p === "object" && "role" in p && "id" in p;
+  }
+
+  const isManager = isProfileWithEmail(profile) && (profile.role === "manager" || profile.role === "admin");
 
   useEffect(() => {
     const fetchTeam = async () => {
-      if (!profile || !isManager) {
+      if (!isManager || !profile) {
         return;
       }
 
@@ -91,13 +98,21 @@ export function AddLeadModal() {
     fetchTeam();
   }, [isManager, profile]);
 
-  const assignableOptions = useMemo(() => {
-    if (!isManager) {
+  const assignableOptions = useMemo<ProfileRow[]>(() => {
+    if (!isManager || !isProfileWithEmail(profile)) {
       return [];
     }
     const merged = [...teamOptions];
-    if (profile && !merged.some((member) => member.id === profile.id)) {
-      merged.unshift(profile);
+    if (
+      typeof profile.id === "string" &&
+      !merged.some((member) => member.id === profile.id)
+    ) {
+      merged.unshift({
+        id: profile.id,
+        role: profile.role ?? null,
+        manager_id: profile.manager_id ?? null,
+        created_at: profile.created_at ?? null,
+      });
     }
     return merged;
   }, [isManager, profile, teamOptions]);
@@ -121,9 +136,15 @@ export function AddLeadModal() {
 
     setErrors({});
 
+    // Only allow submit if profile is present and has id
+    if (!isProfileWithEmail(profile) || typeof profile.id !== "string") {
+      setFormError("Unable to determine lead owner.");
+      return;
+    }
+
     const assignedTo = isManager
-      ? values.assigned_to || profile?.id
-      : profile?.id;
+      ? values.assigned_to || profile.id
+      : profile.id;
 
     if (!assignedTo) {
       setFormError("Unable to determine lead owner.");
@@ -299,7 +320,7 @@ export function AddLeadModal() {
                   <SelectContent>
                     {assignableOptions.map((member) => (
                       <SelectItem key={member.id} value={member.id}>
-                        {member.id.slice(0, 8)} · {member.role ?? "sales"}
+                        {typeof member.id === "string" ? member.id.slice(0, 8) : "-"} · {member.role ?? "sales"}
                       </SelectItem>
                     ))}
                   </SelectContent>

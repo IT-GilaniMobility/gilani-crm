@@ -10,34 +10,40 @@ export type Profile = Database["public"]["Tables"]["profiles"]["Row"] & {
   role: ProfileRole | string | null;
 };
 
+export type ProfileWithEmail = Profile & { email: string };
+
 export function useProfile() {
-  return useQuery({
+  return useQuery<ProfileWithEmail, Error>({
     queryKey: ["profile"],
-  type Profile = {
-    id: string;
-    role: string | null;
-    manager_id: string | null;
-    created_at: string | null;
-  };
-      if (sessionError) {
-  type ProfileWithEmail = Profile & { email: string };
+    queryFn: async (): Promise<ProfileWithEmail> => {
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) throw new Error(`Supabase session error: ${sessionError.message}`);
+      const session = sessionData.session;
+      if (!session) throw new Error("No active session found.");
 
-  export function useProfile() {
-    return useQuery<ProfileWithEmail, Error>({
-      queryKey: ["profile"],
-      queryFn: async (): Promise<ProfileWithEmail> => {
-        // 1. Get session
-        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      const email = typeof session.user?.email === "string" ? session.user.email : "";
+      if (!email) throw new Error("Authenticated user has no email.");
 
-          throw new Error(`Supabase session error: ${sessionError.message}`);
+      const { data: profile, error: profileError } = await supabase
         .from("profiles")
-        .select("*")
-        .eq("id", sessionData.session.user.id)
-          throw new Error("No active session found.");
+        .select("id, role, manager_id, created_at")
+        .eq("id", session.user.id)
+        .single();
 
-      if (error) {
-        throw error;
-      }
+      if (profileError) throw new Error(`Profile fetch error: ${profileError.message}`);
+      if (!profile) throw new Error("Profile not found for authenticated user.");
+
+      return {
+        id: profile.id,
+        role: profile.role,
+        manager_id: profile.manager_id,
+        created_at: profile.created_at,
+        email,
+      };
+    },
+    staleTime: 30_000,
+  });
+}
           .select("id, role, manager_id, created_at")
       if (data) {
         return {

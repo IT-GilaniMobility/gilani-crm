@@ -4,7 +4,8 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useProfile, type Profile } from "@/hooks/useProfile";
+import { useProfile } from "@/hooks/useProfile";
+import type { Profile } from "@/hooks/useProfile";
 import { supabase } from "@/lib/supabaseClient";
 import type { Lead } from "@/hooks/useLeads";
 
@@ -55,7 +56,11 @@ export default function ReportsPage() {
     return { total, byStatus, revenue, autoLost, bySales };
   }, [leads, profiles]);
 
-  if (!profile || profile.role !== "admin") {
+  function isProfileWithRole(p: unknown): p is Profile {
+    return !!p && typeof p === "object" && "role" in p && "id" in p;
+  }
+
+  if (!isProfileWithRole(profile) || profile.role !== "admin") {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-8 text-sm text-slate-500">
         You do not have access to view reports.
