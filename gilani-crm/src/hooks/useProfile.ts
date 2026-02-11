@@ -36,7 +36,7 @@ export function useProfile() {
       }
 
       return {
-        ...data,
+        ...(data ?? { id: sessionData.session.user.id, role: null, manager_id: null, created_at: null }),
         email: sessionData.session.user.email,
       };
     },
