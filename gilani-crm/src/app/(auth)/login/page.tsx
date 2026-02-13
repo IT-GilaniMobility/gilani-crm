@@ -9,6 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabaseClient";
 
+// Force dynamic rendering to prevent build-time prerendering issues
+export const dynamic = "force-dynamic";
+
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email."),
   password: z.string().min(6, "Password must be at least 6 characters."),
