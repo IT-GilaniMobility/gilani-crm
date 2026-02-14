@@ -53,13 +53,13 @@ function formatAmount(value: number | null) {
 function statusVariant(status: string | null) {
   switch (status) {
     case "Won":
-      return "bg-emerald-100 text-emerald-700";
+      return "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-200";
     case "Negotiation":
-      return "bg-amber-100 text-amber-700";
+      return "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-200";
     case "Lost":
-      return "bg-rose-100 text-rose-600";
+      return "bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-200";
     default:
-      return "bg-slate-100 text-slate-600";
+      return "bg-muted text-muted-foreground";
   }
 }
 
@@ -115,7 +115,7 @@ export function LeadsTable({ leads, isLoading, onSelectLead }: LeadsTableProps) 
 
   if (leads.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-10 text-center text-sm text-slate-500">
+      <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">
         No leads yet. Create your first lead to get started.
       </div>
     );
@@ -124,9 +124,9 @@ export function LeadsTable({ leads, isLoading, onSelectLead }: LeadsTableProps) 
   return (
     <div className="space-y-4">
       <div className="hidden sm:block">
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="rounded-2xl border border-border bg-card shadow-sm">
           <Table>
-            <TableHeader className="sticky top-0 z-10 bg-white shadow-sm">
+            <TableHeader className="sticky top-0 z-10 bg-card/95 shadow-sm backdrop-blur">
               <TableRow>
                 <TableHead>
                   <button
@@ -217,7 +217,7 @@ export function LeadsTable({ leads, isLoading, onSelectLead }: LeadsTableProps) 
           <button
             key={lead.id}
             onClick={() => onSelectLead(lead)}
-            className="rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm"
+            className="rounded-2xl border border-border bg-card p-4 text-left shadow-sm"
           >
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold">
@@ -227,10 +227,10 @@ export function LeadsTable({ leads, isLoading, onSelectLead }: LeadsTableProps) 
                 {lead.status ?? "New"}
               </Badge>
             </div>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-muted-foreground">
               {lead.phone ?? "No phone"}
             </p>
-            <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
+            <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
               <span>
                 {lead.assigned_to ? lead.assigned_to.slice(0, 8) : "—"}
               </span>
@@ -239,7 +239,7 @@ export function LeadsTable({ leads, isLoading, onSelectLead }: LeadsTableProps) 
           </button>
         ))}
       </div>
-      <div className="flex items-center justify-between text-sm text-slate-500">
+      <div className="flex items-center justify-between text-sm text-muted-foreground">
         <p>
           Page {page} of {totalPages}
         </p>
