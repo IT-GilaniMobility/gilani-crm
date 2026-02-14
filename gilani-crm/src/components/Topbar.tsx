@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarDays, LogOut, Search } from "lucide-react";
+import { CalendarDays, LogOut, Menu, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -24,16 +24,29 @@ import { supabase } from "@/lib/supabaseClient";
 type TopbarProps = {
   email: string;
   title: string;
+  onOpenMobileSidebar?: () => void;
 };
 
-export function Topbar({ email, title }: TopbarProps) {
+export function Topbar({ email, title, onOpenMobileSidebar }: TopbarProps) {
   const [search, setSearch] = useState("");
 
   return (
     <header className="flex flex-col gap-4 border-b border-border bg-card px-6 py-4 lg:flex-row lg:items-center lg:justify-between lg:px-10">
-      <div>
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Workspace</p>
-        <h1 className="text-xl font-semibold text-foreground">{title}</h1>
+      <div className="flex items-center gap-3">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="lg:hidden"
+          onClick={onOpenMobileSidebar}
+          aria-label="Open sidebar"
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+        <div>
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Workspace</p>
+          <h1 className="text-xl font-semibold text-foreground">{title}</h1>
+        </div>
       </div>
       <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
         <div className="relative w-full max-w-xs">

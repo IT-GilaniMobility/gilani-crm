@@ -182,7 +182,7 @@ export function AddLeadModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="ml-auto">+ Add Lead</Button>
+        <Button className="w-full sm:w-auto">+ Add Lead</Button>
       </DialogTrigger>
       <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>

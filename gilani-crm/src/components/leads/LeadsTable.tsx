@@ -137,7 +137,7 @@ export function LeadsTable({ leads, isLoading, onSelectLead }: LeadsTableProps) 
                     <ChevronDown className="h-3 w-3" />
                   </button>
                 </TableHead>
-                <TableHead>Phone</TableHead>
+                <TableHead className="hidden md:table-cell">Phone</TableHead>
                 <TableHead>
                   <button
                     className="inline-flex items-center gap-1"
@@ -147,8 +147,8 @@ export function LeadsTable({ leads, isLoading, onSelectLead }: LeadsTableProps) 
                     <ChevronDown className="h-3 w-3" />
                   </button>
                 </TableHead>
-                <TableHead>Assigned To</TableHead>
-                <TableHead>
+                <TableHead className="hidden lg:table-cell">Assigned To</TableHead>
+                <TableHead className="hidden lg:table-cell">
                   <button
                     className="inline-flex items-center gap-1"
                     onClick={() => handleSort("deadline_at")}
@@ -157,7 +157,7 @@ export function LeadsTable({ leads, isLoading, onSelectLead }: LeadsTableProps) 
                     <ChevronDown className="h-3 w-3" />
                   </button>
                 </TableHead>
-                <TableHead>
+                <TableHead className="hidden md:table-cell">
                   <button
                     className="inline-flex items-center gap-1"
                     onClick={() => handleSort("amount")}
@@ -179,19 +179,23 @@ export function LeadsTable({ leads, isLoading, onSelectLead }: LeadsTableProps) 
                   <TableCell className="font-medium">
                     {lead.client_name ?? "—"}
                   </TableCell>
-                  <TableCell>{lead.phone ?? "—"}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {lead.phone ?? "—"}
+                  </TableCell>
                   <TableCell>
                     <Badge className={cn("border-0", statusVariant(lead.status))}>
                       {lead.status ?? "New"}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden lg:table-cell">
                     {lead.assigned_to ? lead.assigned_to.slice(0, 8) : "—"}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden lg:table-cell">
                     <SLATimerChip deadlineAt={lead.deadline_at} />
                   </TableCell>
-                  <TableCell>{formatAmount(lead.amount)}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {formatAmount(lead.amount)}
+                  </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -217,7 +221,7 @@ export function LeadsTable({ leads, isLoading, onSelectLead }: LeadsTableProps) 
           <button
             key={lead.id}
             onClick={() => onSelectLead(lead)}
-            className="rounded-2xl border border-border bg-card p-4 text-left shadow-sm"
+            className="w-full rounded-2xl border border-border bg-card p-4 text-left shadow-sm"
           >
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold">
