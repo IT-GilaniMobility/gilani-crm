@@ -40,19 +40,19 @@ export function Sidebar({ collapsed, onToggle, role }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex h-screen flex-col border-r border-slate-200 bg-white transition-all",
+        "flex h-screen flex-col border-r border-border bg-card transition-all",
         collapsed ? "w-20" : "w-64"
       )}
     >
       <div className="flex items-center justify-between px-4 py-6">
         <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
             G
           </div>
           {!collapsed && (
             <div>
               <p className="text-sm font-semibold">Gilani CRM</p>
-              <p className="text-xs text-slate-500">Lead Management</p>
+              <p className="text-xs text-muted-foreground">Lead Management</p>
             </div>
           )}
         </div>
@@ -78,8 +78,8 @@ export function Sidebar({ collapsed, onToggle, role }: SidebarProps) {
               className={cn(
                 "flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition",
                 active
-                  ? "bg-slate-900 text-white"
-                  : "text-slate-600 hover:bg-slate-100"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-accent"
               )}
             >
               <Icon className="h-4 w-4" />
@@ -88,7 +88,7 @@ export function Sidebar({ collapsed, onToggle, role }: SidebarProps) {
           );
         })}
       </nav>
-      <div className="px-4 pb-6 text-xs text-slate-500">
+      <div className="px-4 pb-6 text-xs text-muted-foreground">
         {!collapsed && <p>v1.0 Internal</p>}
       </div>
     </aside>

@@ -73,10 +73,10 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-slate-900">
+          <h2 className="text-2xl font-semibold text-foreground">
             Lead Management
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             Track opportunities, SLA deadlines, and pipeline progress.
           </p>
         </div>
@@ -87,12 +87,12 @@ export default function DashboardPage() {
         {kpis.map((kpi) => (
           <Card key={kpi.label}>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-slate-500">
+              <CardTitle className="text-sm text-muted-foreground">
                 {kpi.label}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-semibold text-slate-900">
+              <p className="text-2xl font-semibold text-foreground">
                 {kpi.value}
               </p>
             </CardContent>
@@ -100,7 +100,7 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
         <div className="grid gap-4 md:grid-cols-3">
           <div className="space-y-2">
             <Label>Status</Label>

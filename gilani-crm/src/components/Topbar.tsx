@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CalendarDays, LogOut, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,14 +30,14 @@ export function Topbar({ email, title }: TopbarProps) {
   const [search, setSearch] = useState("");
 
   return (
-    <header className="flex flex-col gap-4 border-b border-slate-200 bg-white px-6 py-4 lg:flex-row lg:items-center lg:justify-between lg:px-10">
+    <header className="flex flex-col gap-4 border-b border-border bg-card px-6 py-4 lg:flex-row lg:items-center lg:justify-between lg:px-10">
       <div>
-        <p className="text-xs uppercase tracking-wide text-slate-400">Workspace</p>
-        <h1 className="text-xl font-semibold text-slate-900">{title}</h1>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">Workspace</p>
+        <h1 className="text-xl font-semibold text-foreground">{title}</h1>
       </div>
       <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
         <div className="relative w-full max-w-xs">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -46,7 +47,7 @@ export function Topbar({ email, title }: TopbarProps) {
         </div>
         <Select defaultValue="last_30">
           <SelectTrigger className="w-full sm:w-[180px]">
-            <CalendarDays className="mr-2 h-4 w-4 text-slate-500" />
+            <CalendarDays className="mr-2 h-4 w-4 text-muted-foreground" />
             <SelectValue placeholder="Date range" />
           </SelectTrigger>
           <SelectContent>
@@ -74,6 +75,7 @@ export function Topbar({ email, title }: TopbarProps) {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <ThemeToggle />
       </div>
     </header>
   );
